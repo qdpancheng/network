@@ -1,0 +1,14 @@
+1、main和_tmain  以及  wmain的区别
+
+_tmain()是unicode版本的的main()   
+
+_tmain这个符号多见于VC++创建的控制台工程中，这个是为了保证移植unicode而加入的（一般_t、_T、T()这些东西都和unicode有关系），对于使用非unicode字符集的工程来说，实际上和main没有差别（其实就算是使用unicode字符集也未必有多大的差别）。
+
+1。 main是C程序的函数，_tmain是main为了支持unicode所使用的main的别名
+2。 _tmain的定义在<tchar.h>可以找到,如#define _tmain main，所以要加＃i nclude <tchar.h>才能用。
+
+3。因此_tmain compile后仍为main，所以都可以执行
+
+另外,wmain也是main的另一个别名,是为了支持二个字节的语言环境
+
+2、
