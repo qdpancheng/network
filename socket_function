@@ -11,4 +11,26 @@ _tmain这个符号多见于VC++创建的控制台工程中，这个是为了保�
 
 另外,wmain也是main的另一个别名,是为了支持二个字节的语言环境
 
-2、
+2、winsocket相关函数释读
+2.1   WSAStartup
+                        int WSAStartup(
+                          _In_  WORD      wVersionRequested,
+                          _Out_ LPWSADATA lpWSAData
+                        );
+Parameters
+wVersionRequested [in]
+The highest version of Windows Sockets specification that the caller can use. The high-order byte specifies the minor version number; the low-order byte specifies the major version number.
+lpWSAData [out]
+A pointer to the WSADATA data structure that is to receive details of the Windows Sockets implementation.
+Return value
+If successful, the WSAStartup function returns zero. Otherwise, it returns one of the error codes listed below.
+注释：
+  进行socket编程前必须先调用该函数，该函数的第一个参数确定了socket的版本号，第二个参数是将winsocket的实现细节存储下来。只有成功的调用
+了个该函数后才能继续调用socket的其他函数。
+  Once an application or DLL has made a successful WSAStartup call, it can proceed to make other Windows Sockets calls as needed. 
+When it has finished using the services of the Winsock DLL, the application must call WSACleanup to allow the Winsock DLL to 
+free internal Winsock resources used by the application.
+  An application must call the WSACleanup function for every successful time the WSAStartup function is called. This means, 
+for example, that if an application calls WSAStartup three times, it must call WSACleanup three times. The first two calls to 
+WSACleanup do nothing except decrement an internal counter; the final WSACleanup call for the task does all necessary resource 
+deallocation for the task.
