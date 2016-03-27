@@ -11,6 +11,14 @@ _tmain这个符号多见于VC++创建的控制台工程中，这个是为了保�
 
 另外,wmain也是main的另一个别名,是为了支持二个字节的语言环境
 
+/*********************************************************************************************
+                                  socket编程基本流程
+WSAStartup()--->socket()--->bind()---->listen()----->accept()----->recv()等---->closesocket(Server)
+初始化socket    建立socket     绑定      开始监听                  接收数据              |
+                                                               释放资源       关闭socket |
+                                                              WSACleanup()<----closesocket(Client)
+*********************************************************************************************/
+
 2、winsocket相关函数释读
 2.1   WSAStartup
                         int WSAStartup(
@@ -26,11 +34,26 @@ Return value
 If successful, the WSAStartup function returns zero. Otherwise, it returns one of the error codes listed below.
 注释：
   进行socket编程前必须先调用该函数，该函数的第一个参数确定了socket的版本号，第二个参数是将winsocket的实现细节存储下来。只有成功的调用
-了个该函数后才能继续调用socket的其他函数。
-  Once an application or DLL has made a successful WSAStartup call, it can proceed to make other Windows Sockets calls as needed. 
-When it has finished using the services of the Winsock DLL, the application must call WSACleanup to allow the Winsock DLL to 
-free internal Winsock resources used by the application.
-  An application must call the WSACleanup function for every successful time the WSAStartup function is called. This means, 
-for example, that if an application calls WSAStartup three times, it must call WSACleanup three times. The first two calls to 
-WSACleanup do nothing except decrement an internal counter; the final WSACleanup call for the task does all necessary resource 
-deallocation for the task.
+了个该函数后才能继续调用socket的其他函数。当调用完socket函数用，需要调用函数WSACleanup来释放内部的winsocket资源。应用程序对每个成功调
+用的WSAStartup函数都要有对应的WSACleanup,例如一个应用程序调用了WSAStartup三次，那么就必须调用WSACleanup，其中，前两次调用WSACleanup什么
+事情也没做，只是对内部计数器减1，最后一次WSACleanup才会释放socket所占用的系统资源。
+
+2.2         socket
+                      SOCKET WSAAPI socket(
+                        _In_ int af,
+                        _In_ int type,
+                        _In_ int protocol
+                      );
+af [in]
+The address family specification. Possible values for the address family are defined in the Winsock2.h header file.
+type [in]
+The type specification for the new socket. Possible values for the socket type are defined in the Winsock2.h header file.
+protocol [in]
+The protocol to be used. The possible options for the protocol parameter are specific to the address family and socket type specified. 
+Possible values for the protocol are defined in the Winsock2.h and Wsrm.h header files.
+Return value
+If no error occurs, socket returns a descriptor referencing the new socket. Otherwise, a value of INVALID_SOCKET is returned, and a 
+specific error code can be retrieved by calling WSAGetLastError.
+注释：
+  
+
