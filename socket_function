@@ -55,5 +55,39 @@ Return value
 If no error occurs, socket returns a descriptor referencing the new socket. Otherwise, a value of INVALID_SOCKET is returned, and a 
 specific error code can be retrieved by calling WSAGetLastError.
 注释：
-  
+  该函数会生成一个套接字描述符，同时分配相应的资源以及网络传输协议等。其中，af参数代表了支持的地址族，包括IPV4、IPV6等；type代表了socket
+是流式还是数据报式等；protocol代表了使用的协议，有ICMP、IGMP、TCP、UDP等
+
+2.3            bind
+                            int bind(
+                              _In_ SOCKET                s,
+                              _In_ const struct sockaddr *name,
+                              _In_ int                   namelen
+                            );
+s [in]
+A descriptor identifying an unbound socket.
+name [in]
+A pointer to a sockaddr structure of the local address to assign to the bound socket .
+namelen [in]
+The length, in bytes, of the value pointed to by the name parameter.
+If no error occurs, bind returns zero. Otherwise, it returns SOCKET_ERROR, and a specific error code can be retrieved by 
+calling WSAGetLastError.
+注释：
+  1、输入1代表了未绑定的要进行绑定的socket描述符2、输入2代表了要绑定的本机地址的socket结构体3、输入3代表了输入2的长度，单位为字节
+
+2.4           listen
+                              int listen(
+                                _In_ SOCKET s,
+                                _In_ int    backlog
+                              );
+s [in]
+A descriptor identifying a bound, unconnected socket.
+backlog [in]
+The maximum length of the queue of pending connections. 
+Return value
+If no error occurs, listen returns zero. Otherwise, a value of SOCKET_ERROR is returned, and a specific error code can be retrieved 
+by calling WSAGetLastError.   
+  注释：s[in]表示一个未连接的socket描述符、backlog[in]表示最大的连接数（应该是队列的长度）。
+
+
 
